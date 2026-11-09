@@ -1,0 +1,39 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.9.6, pytest-8.4.2, pluggy-1.6.0 -- /Users/johnsfolder/workspace/language-of-computation/week4-assignment/.venv/bin/python
+rootdir: /Users/johnsfolder/workspace/language-of-computation/week4-assignment
+configfile: pytest.ini
+collecting ... collected 31 items
+
+test_ingest.py::test_example[example_01[0439139600|9780439139601]] PASSED [  3%]
+test_ingest.py::test_example[example_02[043965548X|blank]] PASSED        [  6%]
+test_ingest.py::test_example[example_03[031200009x|9780312000097]] PASSED [  9%]
+test_ingest.py::test_example[example_04[0-450-19827-8|9780450198274]] PASSED [ 12%]
+test_ingest.py::test_example[example_05[162 001 4750|9781620014752]] PASSED [ 16%]
+test_ingest.py::test_example[example_06[439023483|blank]] PASSED         [ 19%]
+test_ingest.py::test_example[example_07[439554934|9.78043955493e+12]] PASSED [ 22%]
+test_ingest.py::test_example[example_08[439023483|9.78043902348e+12]] PASSED [ 25%]
+test_ingest.py::test_example[example_09[blank|9.78043902348e+12]] PASSED [ 29%]
+test_ingest.py::test_example[example_10[blank|76783609419.0]] PASSED     [ 32%]
+test_ingest.py::test_example[example_11[blank|9780439139601.0]] PASSED   [ 35%]
+test_ingest.py::test_example[example_12[04390A3483|blank]] PASSED        [ 38%]
+test_ingest.py::test_example[example_13[15287463097|blank]] PASSED       [ 41%]
+test_ingest.py::test_example[example_14[1854433017|blank]] PASSED        [ 45%]
+test_ingest.py::test_example[example_15[blank|blank]] PASSED             [ 48%]
+test_ingest.py::test_example[example_16[1555550126|9781555550134]] PASSED [ 51%]
+test_ingest.py::test_example[example_17[9781982147600|blank]] PASSED     [ 54%]
+test_ingest.py::test_example[example_18[blank|9798351220413]] PASSED     [ 58%]
+test_ingest.py::test_example[example_19[0439139600|9780061120085]] PASSED [ 61%]
+test_ingest.py::test_example[example_20[0439139600|12345]] PASSED        [ 64%]
+test_ingest.py::test_example[example_21[9780439139601|9.7804391396e+12]] PASSED [ 67%]
+test_ingest.py::test_example_15_blank_and_blank_is_rejected_even_for_a_known_supplier_id PASSED [ 70%]
+test_ingest.py::test_example_22_same_row_again_is_skipped_without_a_duplicate PASSED [ 74%]
+test_ingest.py::test_running_the_same_file_twice_creates_no_duplicates[books.csv] PASSED [ 77%]
+test_ingest.py::test_running_the_same_file_twice_creates_no_duplicates[books-batch2.csv] PASSED [ 80%]
+test_ingest.py::test_every_run_adds_a_log_entry_without_overwriting_earlier_ones PASSED [ 83%]
+test_ingest.py::test_loaded_updated_skipped_and_rejected_add_up_to_rows_read[books.csv] PASSED [ 87%]
+test_ingest.py::test_loaded_updated_skipped_and_rejected_add_up_to_rows_read[books-batch2.csv] PASSED [ 90%]
+test_ingest.py::test_loaded_updated_skipped_and_rejected_add_up_to_rows_read[three-runs-in-order] PASSED [ 93%]
+test_ingest.py::test_same_file_on_an_empty_database_twice_gives_the_same_database[books.csv] PASSED [ 96%]
+test_ingest.py::test_same_file_on_an_empty_database_twice_gives_the_same_database[books-batch2.csv] PASSED [100%]
+
+============================== 31 passed in 3.30s ==============================

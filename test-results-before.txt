@@ -1,0 +1,1223 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.9.6, pytest-8.4.2, pluggy-1.6.0 -- /Users/johnsfolder/workspace/language-of-computation/week4-assignment/.venv/bin/python
+rootdir: /Users/johnsfolder/workspace/language-of-computation/week4-assignment
+configfile: pytest.ini
+collecting ... collected 31 items
+
+test_ingest.py::test_example[example_01[0439139600|9780439139601]] FAILED [  3%]
+test_ingest.py::test_example[example_02[043965548X|blank]] FAILED        [  6%]
+test_ingest.py::test_example[example_03[031200009x|9780312000097]] FAILED [  9%]
+test_ingest.py::test_example[example_04[0-450-19827-8|9780450198274]] FAILED [ 12%]
+test_ingest.py::test_example[example_05[162 001 4750|9781620014752]] FAILED [ 16%]
+test_ingest.py::test_example[example_06[439023483|blank]] FAILED         [ 19%]
+test_ingest.py::test_example[example_07[439554934|9.78043955493e+12]] FAILED [ 22%]
+test_ingest.py::test_example[example_08[439023483|9.78043902348e+12]] FAILED [ 25%]
+test_ingest.py::test_example[example_09[blank|9.78043902348e+12]] FAILED [ 29%]
+test_ingest.py::test_example[example_10[blank|76783609419.0]] FAILED     [ 32%]
+test_ingest.py::test_example[example_11[blank|9780439139601.0]] FAILED   [ 35%]
+test_ingest.py::test_example[example_12[04390A3483|blank]] FAILED        [ 38%]
+test_ingest.py::test_example[example_13[15287463097|blank]] FAILED       [ 41%]
+test_ingest.py::test_example[example_14[1854433017|blank]] FAILED        [ 45%]
+test_ingest.py::test_example[example_15[blank|blank]] FAILED             [ 48%]
+test_ingest.py::test_example[example_16[1555550126|9781555550134]] FAILED [ 51%]
+test_ingest.py::test_example[example_17[9781982147600|blank]] FAILED     [ 54%]
+test_ingest.py::test_example[example_18[blank|9798351220413]] FAILED     [ 58%]
+test_ingest.py::test_example[example_19[0439139600|9780061120085]] FAILED [ 61%]
+test_ingest.py::test_example[example_20[0439139600|12345]] FAILED        [ 64%]
+test_ingest.py::test_example[example_21[9780439139601|9.7804391396e+12]] FAILED [ 67%]
+test_ingest.py::test_example_15_blank_and_blank_is_rejected_even_for_a_known_supplier_id FAILED [ 70%]
+test_ingest.py::test_example_22_same_row_again_is_skipped_without_a_duplicate FAILED [ 74%]
+test_ingest.py::test_running_the_same_file_twice_creates_no_duplicates[books.csv] FAILED [ 77%]
+test_ingest.py::test_running_the_same_file_twice_creates_no_duplicates[books-batch2.csv] FAILED [ 80%]
+test_ingest.py::test_every_run_adds_a_log_entry_without_overwriting_earlier_ones FAILED [ 83%]
+test_ingest.py::test_loaded_updated_skipped_and_rejected_add_up_to_rows_read[books.csv] FAILED [ 87%]
+test_ingest.py::test_loaded_updated_skipped_and_rejected_add_up_to_rows_read[books-batch2.csv] FAILED [ 90%]
+test_ingest.py::test_loaded_updated_skipped_and_rejected_add_up_to_rows_read[three-runs-in-order] FAILED [ 93%]
+test_ingest.py::test_same_file_on_an_empty_database_twice_gives_the_same_database[books.csv] FAILED [ 96%]
+test_ingest.py::test_same_file_on_an_empty_database_twice_gives_the_same_database[books-batch2.csv] FAILED [100%]
+
+=================================== FAILURES ===================================
+______________ test_example[example_01[0439139600|9780439139601]] ______________
+
+ws = <test_ingest.Workspace object at 0x10a2fde20>, number = 1
+isbn = '0439139600', isbn13 = '9780439139601'
+expected = {'isbn': '0439139600', 'isbn13': '9780439139601', 'outcome': 'load', 'repairs': 0, ...}
+
+    @pytest.mark.parametrize(
+        "number, isbn, isbn13, expected", EXAMPLES,
+        ids=["example_%02d[%s|%s]" % (n, i.strip() or "blank", j or "blank") for n, i, j, _ in EXAMPLES],
+    )
+    def test_example(ws, number, isbn, isbn13, expected):
+        path = ws.write_csv("example.csv", [make_row(number, isbn, isbn13)])
+>       entry = ws.run(path)
+
+test_ingest.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a2fde20>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-jralkvqj/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-jralkvqj/ingestion-log.json' = <test_ingest.Workspace object at 0x10a2fde20>.log
+
+test_ingest.py:91: AssertionError
+__________________ test_example[example_02[043965548X|blank]] __________________
+
+ws = <test_ingest.Workspace object at 0x10a493340>, number = 2
+isbn = '043965548X', isbn13 = ''
+expected = {'isbn': '043965548X', 'isbn13': '9780439655484', 'outcome': 'load', 'repairs': 1, ...}
+
+    @pytest.mark.parametrize(
+        "number, isbn, isbn13, expected", EXAMPLES,
+        ids=["example_%02d[%s|%s]" % (n, i.strip() or "blank", j or "blank") for n, i, j, _ in EXAMPLES],
+    )
+    def test_example(ws, number, isbn, isbn13, expected):
+        path = ws.write_csv("example.csv", [make_row(number, isbn, isbn13)])
+>       entry = ws.run(path)
+
+test_ingest.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a493340>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-6aqytqrp/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-6aqytqrp/ingestion-log.json' = <test_ingest.Workspace object at 0x10a493340>.log
+
+test_ingest.py:91: AssertionError
+______________ test_example[example_03[031200009x|9780312000097]] ______________
+
+ws = <test_ingest.Workspace object at 0x10a30e670>, number = 3
+isbn = '031200009x', isbn13 = '9780312000097'
+expected = {'isbn': '031200009X', 'isbn13': '9780312000097', 'outcome': 'load', 'repairs': 1, ...}
+
+    @pytest.mark.parametrize(
+        "number, isbn, isbn13, expected", EXAMPLES,
+        ids=["example_%02d[%s|%s]" % (n, i.strip() or "blank", j or "blank") for n, i, j, _ in EXAMPLES],
+    )
+    def test_example(ws, number, isbn, isbn13, expected):
+        path = ws.write_csv("example.csv", [make_row(number, isbn, isbn13)])
+>       entry = ws.run(path)
+
+test_ingest.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a30e670>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-g53289ru/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-g53289ru/ingestion-log.json' = <test_ingest.Workspace object at 0x10a30e670>.log
+
+test_ingest.py:91: AssertionError
+____________ test_example[example_04[0-450-19827-8|9780450198274]] _____________
+
+ws = <test_ingest.Workspace object at 0x10a2fc2e0>, number = 4
+isbn = '0-450-19827-8', isbn13 = '9780450198274'
+expected = {'isbn': '0450198278', 'isbn13': '9780450198274', 'outcome': 'load', 'repairs': 1, ...}
+
+    @pytest.mark.parametrize(
+        "number, isbn, isbn13, expected", EXAMPLES,
+        ids=["example_%02d[%s|%s]" % (n, i.strip() or "blank", j or "blank") for n, i, j, _ in EXAMPLES],
+    )
+    def test_example(ws, number, isbn, isbn13, expected):
+        path = ws.write_csv("example.csv", [make_row(number, isbn, isbn13)])
+>       entry = ws.run(path)
+
+test_ingest.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a2fc2e0>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-hvpwqyql/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-hvpwqyql/ingestion-log.json' = <test_ingest.Workspace object at 0x10a2fc2e0>.log
+
+test_ingest.py:91: AssertionError
+_____________ test_example[example_05[162 001 4750|9781620014752]] _____________
+
+ws = <test_ingest.Workspace object at 0x10a32cac0>, number = 5
+isbn = ' 162 001 4750 ', isbn13 = '9781620014752'
+expected = {'isbn': '1620014750', 'isbn13': '9781620014752', 'outcome': 'load', 'repairs': 1, ...}
+
+    @pytest.mark.parametrize(
+        "number, isbn, isbn13, expected", EXAMPLES,
+        ids=["example_%02d[%s|%s]" % (n, i.strip() or "blank", j or "blank") for n, i, j, _ in EXAMPLES],
+    )
+    def test_example(ws, number, isbn, isbn13, expected):
+        path = ws.write_csv("example.csv", [make_row(number, isbn, isbn13)])
+>       entry = ws.run(path)
+
+test_ingest.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a32cac0>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-zp3ft20g/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-zp3ft20g/ingestion-log.json' = <test_ingest.Workspace object at 0x10a32cac0>.log
+
+test_ingest.py:91: AssertionError
+__________________ test_example[example_06[439023483|blank]] ___________________
+
+ws = <test_ingest.Workspace object at 0x10a2fce80>, number = 6
+isbn = '439023483', isbn13 = ''
+expected = {'isbn': '0439023483', 'isbn13': '9780439023481', 'outcome': 'load', 'repairs': 2, ...}
+
+    @pytest.mark.parametrize(
+        "number, isbn, isbn13, expected", EXAMPLES,
+        ids=["example_%02d[%s|%s]" % (n, i.strip() or "blank", j or "blank") for n, i, j, _ in EXAMPLES],
+    )
+    def test_example(ws, number, isbn, isbn13, expected):
+        path = ws.write_csv("example.csv", [make_row(number, isbn, isbn13)])
+>       entry = ws.run(path)
+
+test_ingest.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a2fce80>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-8laimrl1/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-8laimrl1/ingestion-log.json' = <test_ingest.Workspace object at 0x10a2fce80>.log
+
+test_ingest.py:91: AssertionError
+____________ test_example[example_07[439554934|9.78043955493e+12]] _____________
+
+ws = <test_ingest.Workspace object at 0x10a2b3e50>, number = 7
+isbn = '439554934', isbn13 = '9.78043955493e+12'
+expected = {'isbn': '0439554934', 'isbn13': '9780439554930', 'outcome': 'load', 'repairs': 2, ...}
+
+    @pytest.mark.parametrize(
+        "number, isbn, isbn13, expected", EXAMPLES,
+        ids=["example_%02d[%s|%s]" % (n, i.strip() or "blank", j or "blank") for n, i, j, _ in EXAMPLES],
+    )
+    def test_example(ws, number, isbn, isbn13, expected):
+        path = ws.write_csv("example.csv", [make_row(number, isbn, isbn13)])
+>       entry = ws.run(path)
+
+test_ingest.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a2b3e50>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-jiw8sbgt/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-jiw8sbgt/ingestion-log.json' = <test_ingest.Workspace object at 0x10a2b3e50>.log
+
+test_ingest.py:91: AssertionError
+____________ test_example[example_08[439023483|9.78043902348e+12]] _____________
+
+ws = <test_ingest.Workspace object at 0x10a42ffd0>, number = 8
+isbn = '439023483', isbn13 = '9.78043902348e+12'
+expected = {'isbn': '0439023483', 'isbn13': '9780439023481', 'outcome': 'load', 'repairs': 2, ...}
+
+    @pytest.mark.parametrize(
+        "number, isbn, isbn13, expected", EXAMPLES,
+        ids=["example_%02d[%s|%s]" % (n, i.strip() or "blank", j or "blank") for n, i, j, _ in EXAMPLES],
+    )
+    def test_example(ws, number, isbn, isbn13, expected):
+        path = ws.write_csv("example.csv", [make_row(number, isbn, isbn13)])
+>       entry = ws.run(path)
+
+test_ingest.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a42ffd0>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-6ozj_y60/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-6ozj_y60/ingestion-log.json' = <test_ingest.Workspace object at 0x10a42ffd0>.log
+
+test_ingest.py:91: AssertionError
+______________ test_example[example_09[blank|9.78043902348e+12]] _______________
+
+ws = <test_ingest.Workspace object at 0x10a2fd370>, number = 9, isbn = ''
+isbn13 = '9.78043902348e+12'
+expected = {'isbn': None, 'isbn13': None, 'outcome': 'load', 'repairs': 0, ...}
+
+    @pytest.mark.parametrize(
+        "number, isbn, isbn13, expected", EXAMPLES,
+        ids=["example_%02d[%s|%s]" % (n, i.strip() or "blank", j or "blank") for n, i, j, _ in EXAMPLES],
+    )
+    def test_example(ws, number, isbn, isbn13, expected):
+        path = ws.write_csv("example.csv", [make_row(number, isbn, isbn13)])
+>       entry = ws.run(path)
+
+test_ingest.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a2fd370>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-pi8iliwu/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-pi8iliwu/ingestion-log.json' = <test_ingest.Workspace object at 0x10a2fd370>.log
+
+test_ingest.py:91: AssertionError
+________________ test_example[example_10[blank|76783609419.0]] _________________
+
+ws = <test_ingest.Workspace object at 0x10a2fca90>, number = 10, isbn = ''
+isbn13 = '76783609419.0'
+expected = {'isbn': None, 'isbn13': None, 'outcome': 'load', 'repairs': 0, ...}
+
+    @pytest.mark.parametrize(
+        "number, isbn, isbn13, expected", EXAMPLES,
+        ids=["example_%02d[%s|%s]" % (n, i.strip() or "blank", j or "blank") for n, i, j, _ in EXAMPLES],
+    )
+    def test_example(ws, number, isbn, isbn13, expected):
+        path = ws.write_csv("example.csv", [make_row(number, isbn, isbn13)])
+>       entry = ws.run(path)
+
+test_ingest.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a2fca90>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-kgech7nw/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-kgech7nw/ingestion-log.json' = <test_ingest.Workspace object at 0x10a2fca90>.log
+
+test_ingest.py:91: AssertionError
+_______________ test_example[example_11[blank|9780439139601.0]] ________________
+
+ws = <test_ingest.Workspace object at 0x10a29f910>, number = 11, isbn = ''
+isbn13 = '9780439139601.0'
+expected = {'isbn': None, 'isbn13': None, 'outcome': 'load', 'repairs': 0, ...}
+
+    @pytest.mark.parametrize(
+        "number, isbn, isbn13, expected", EXAMPLES,
+        ids=["example_%02d[%s|%s]" % (n, i.strip() or "blank", j or "blank") for n, i, j, _ in EXAMPLES],
+    )
+    def test_example(ws, number, isbn, isbn13, expected):
+        path = ws.write_csv("example.csv", [make_row(number, isbn, isbn13)])
+>       entry = ws.run(path)
+
+test_ingest.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a29f910>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-cu4funv_/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-cu4funv_/ingestion-log.json' = <test_ingest.Workspace object at 0x10a29f910>.log
+
+test_ingest.py:91: AssertionError
+__________________ test_example[example_12[04390A3483|blank]] __________________
+
+ws = <test_ingest.Workspace object at 0x10a312df0>, number = 12
+isbn = '04390A3483', isbn13 = ''
+expected = {'outcome': 'reject', 'sentence': 'Find the correct ISBN, correct the row, and load the file again.'}
+
+    @pytest.mark.parametrize(
+        "number, isbn, isbn13, expected", EXAMPLES,
+        ids=["example_%02d[%s|%s]" % (n, i.strip() or "blank", j or "blank") for n, i, j, _ in EXAMPLES],
+    )
+    def test_example(ws, number, isbn, isbn13, expected):
+        path = ws.write_csv("example.csv", [make_row(number, isbn, isbn13)])
+>       entry = ws.run(path)
+
+test_ingest.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a312df0>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-l1ehpr8p/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-l1ehpr8p/ingestion-log.json' = <test_ingest.Workspace object at 0x10a312df0>.log
+
+test_ingest.py:91: AssertionError
+_________________ test_example[example_13[15287463097|blank]] __________________
+
+ws = <test_ingest.Workspace object at 0x10a36e250>, number = 13
+isbn = '15287463097', isbn13 = ''
+expected = {'outcome': 'reject', 'sentence': 'Find the correct ISBN, correct the row, and load the file again.'}
+
+    @pytest.mark.parametrize(
+        "number, isbn, isbn13, expected", EXAMPLES,
+        ids=["example_%02d[%s|%s]" % (n, i.strip() or "blank", j or "blank") for n, i, j, _ in EXAMPLES],
+    )
+    def test_example(ws, number, isbn, isbn13, expected):
+        path = ws.write_csv("example.csv", [make_row(number, isbn, isbn13)])
+>       entry = ws.run(path)
+
+test_ingest.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a36e250>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-ii9rtolh/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-ii9rtolh/ingestion-log.json' = <test_ingest.Workspace object at 0x10a36e250>.log
+
+test_ingest.py:91: AssertionError
+__________________ test_example[example_14[1854433017|blank]] __________________
+
+ws = <test_ingest.Workspace object at 0x10a2ee400>, number = 14
+isbn = '1854433017', isbn13 = ''
+expected = {'outcome': 'reject', 'sentence': 'Find the correct ISBN, correct the row, and load the file again.'}
+
+    @pytest.mark.parametrize(
+        "number, isbn, isbn13, expected", EXAMPLES,
+        ids=["example_%02d[%s|%s]" % (n, i.strip() or "blank", j or "blank") for n, i, j, _ in EXAMPLES],
+    )
+    def test_example(ws, number, isbn, isbn13, expected):
+        path = ws.write_csv("example.csv", [make_row(number, isbn, isbn13)])
+>       entry = ws.run(path)
+
+test_ingest.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a2ee400>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-z11g0m02/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-z11g0m02/ingestion-log.json' = <test_ingest.Workspace object at 0x10a2ee400>.log
+
+test_ingest.py:91: AssertionError
+____________________ test_example[example_15[blank|blank]] _____________________
+
+ws = <test_ingest.Workspace object at 0x10a2914f0>, number = 15, isbn = ''
+isbn13 = ''
+expected = {'outcome': 'reject', 'sentence': 'Find the correct ISBN, correct the row, and load the file again.'}
+
+    @pytest.mark.parametrize(
+        "number, isbn, isbn13, expected", EXAMPLES,
+        ids=["example_%02d[%s|%s]" % (n, i.strip() or "blank", j or "blank") for n, i, j, _ in EXAMPLES],
+    )
+    def test_example(ws, number, isbn, isbn13, expected):
+        path = ws.write_csv("example.csv", [make_row(number, isbn, isbn13)])
+>       entry = ws.run(path)
+
+test_ingest.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a2914f0>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-tr4wa8s3/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-tr4wa8s3/ingestion-log.json' = <test_ingest.Workspace object at 0x10a2914f0>.log
+
+test_ingest.py:91: AssertionError
+______________ test_example[example_16[1555550126|9781555550134]] ______________
+
+ws = <test_ingest.Workspace object at 0x10a49e820>, number = 16
+isbn = '1555550126', isbn13 = '9781555550134'
+expected = {'outcome': 'reject', 'sentence': 'Check which value or book is correct.'}
+
+    @pytest.mark.parametrize(
+        "number, isbn, isbn13, expected", EXAMPLES,
+        ids=["example_%02d[%s|%s]" % (n, i.strip() or "blank", j or "blank") for n, i, j, _ in EXAMPLES],
+    )
+    def test_example(ws, number, isbn, isbn13, expected):
+        path = ws.write_csv("example.csv", [make_row(number, isbn, isbn13)])
+>       entry = ws.run(path)
+
+test_ingest.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a49e820>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-9ijxf15c/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-9ijxf15c/ingestion-log.json' = <test_ingest.Workspace object at 0x10a49e820>.log
+
+test_ingest.py:91: AssertionError
+________________ test_example[example_17[9781982147600|blank]] _________________
+
+ws = <test_ingest.Workspace object at 0x10a3fc160>, number = 17
+isbn = '9781982147600', isbn13 = ''
+expected = {'isbn': '1982147601', 'isbn13': '9781982147600', 'outcome': 'load', 'repairs': 2, ...}
+
+    @pytest.mark.parametrize(
+        "number, isbn, isbn13, expected", EXAMPLES,
+        ids=["example_%02d[%s|%s]" % (n, i.strip() or "blank", j or "blank") for n, i, j, _ in EXAMPLES],
+    )
+    def test_example(ws, number, isbn, isbn13, expected):
+        path = ws.write_csv("example.csv", [make_row(number, isbn, isbn13)])
+>       entry = ws.run(path)
+
+test_ingest.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a3fc160>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-1tww5942/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-1tww5942/ingestion-log.json' = <test_ingest.Workspace object at 0x10a3fc160>.log
+
+test_ingest.py:91: AssertionError
+________________ test_example[example_18[blank|9798351220413]] _________________
+
+ws = <test_ingest.Workspace object at 0x10a2f53d0>, number = 18, isbn = ''
+isbn13 = '9798351220413'
+expected = {'isbn': None, 'isbn13': '9798351220413', 'outcome': 'load', 'repairs': 0, ...}
+
+    @pytest.mark.parametrize(
+        "number, isbn, isbn13, expected", EXAMPLES,
+        ids=["example_%02d[%s|%s]" % (n, i.strip() or "blank", j or "blank") for n, i, j, _ in EXAMPLES],
+    )
+    def test_example(ws, number, isbn, isbn13, expected):
+        path = ws.write_csv("example.csv", [make_row(number, isbn, isbn13)])
+>       entry = ws.run(path)
+
+test_ingest.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a2f53d0>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-lldeggwk/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-lldeggwk/ingestion-log.json' = <test_ingest.Workspace object at 0x10a2f53d0>.log
+
+test_ingest.py:91: AssertionError
+______________ test_example[example_19[0439139600|9780061120085]] ______________
+
+ws = <test_ingest.Workspace object at 0x10a36e460>, number = 19
+isbn = '0439139600', isbn13 = '9780061120085'
+expected = {'outcome': 'reject', 'sentence': 'Find the correct ISBN, correct the row, and load the file again.'}
+
+    @pytest.mark.parametrize(
+        "number, isbn, isbn13, expected", EXAMPLES,
+        ids=["example_%02d[%s|%s]" % (n, i.strip() or "blank", j or "blank") for n, i, j, _ in EXAMPLES],
+    )
+    def test_example(ws, number, isbn, isbn13, expected):
+        path = ws.write_csv("example.csv", [make_row(number, isbn, isbn13)])
+>       entry = ws.run(path)
+
+test_ingest.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a36e460>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-mtl68uli/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-mtl68uli/ingestion-log.json' = <test_ingest.Workspace object at 0x10a36e460>.log
+
+test_ingest.py:91: AssertionError
+__________________ test_example[example_20[0439139600|12345]] __________________
+
+ws = <test_ingest.Workspace object at 0x10a37e2b0>, number = 20
+isbn = '0439139600', isbn13 = '12345'
+expected = {'isbn': '0439139600', 'isbn13': None, 'outcome': 'load', 'repairs': 0, ...}
+
+    @pytest.mark.parametrize(
+        "number, isbn, isbn13, expected", EXAMPLES,
+        ids=["example_%02d[%s|%s]" % (n, i.strip() or "blank", j or "blank") for n, i, j, _ in EXAMPLES],
+    )
+    def test_example(ws, number, isbn, isbn13, expected):
+        path = ws.write_csv("example.csv", [make_row(number, isbn, isbn13)])
+>       entry = ws.run(path)
+
+test_ingest.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a37e2b0>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-6iqcdpmj/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-6iqcdpmj/ingestion-log.json' = <test_ingest.Workspace object at 0x10a37e2b0>.log
+
+test_ingest.py:91: AssertionError
+___________ test_example[example_21[9780439139601|9.7804391396e+12]] ___________
+
+ws = <test_ingest.Workspace object at 0x10a363550>, number = 21
+isbn = '9780439139601', isbn13 = '9.7804391396e+12'
+expected = {'outcome': 'reject', 'sentence': 'Check which value or book is correct.'}
+
+    @pytest.mark.parametrize(
+        "number, isbn, isbn13, expected", EXAMPLES,
+        ids=["example_%02d[%s|%s]" % (n, i.strip() or "blank", j or "blank") for n, i, j, _ in EXAMPLES],
+    )
+    def test_example(ws, number, isbn, isbn13, expected):
+        path = ws.write_csv("example.csv", [make_row(number, isbn, isbn13)])
+>       entry = ws.run(path)
+
+test_ingest.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a363550>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-uo6j929p/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-uo6j929p/ingestion-log.json' = <test_ingest.Workspace object at 0x10a363550>.log
+
+test_ingest.py:91: AssertionError
+___ test_example_15_blank_and_blank_is_rejected_even_for_a_known_supplier_id ___
+
+ws = <test_ingest.Workspace object at 0x10a3c1e80>
+
+    def test_example_15_blank_and_blank_is_rejected_even_for_a_known_supplier_id(ws):
+        known = make_row(15, "0439139600", "9780439139601", book_id=915015)
+        first = ws.write_csv("known.csv", [known])
+>       ws.run(first)
+
+test_ingest.py:242: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a3c1e80>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-aqptz26s/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-aqptz26s/ingestion-log.json' = <test_ingest.Workspace object at 0x10a3c1e80>.log
+
+test_ingest.py:91: AssertionError
+________ test_example_22_same_row_again_is_skipped_without_a_duplicate _________
+
+ws = <test_ingest.Workspace object at 0x10a363850>
+
+    def test_example_22_same_row_again_is_skipped_without_a_duplicate(ws):
+        row = make_row(22, "0439139600", "9780439139601")
+        path = ws.write_csv("twice.csv", [row, dict(row)])
+>       counts = totals(ws.run(path))
+
+test_ingest.py:258: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a363850>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-c76k7tyz/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-c76k7tyz/ingestion-log.json' = <test_ingest.Workspace object at 0x10a363850>.log
+
+test_ingest.py:91: AssertionError
+______ test_running_the_same_file_twice_creates_no_duplicates[books.csv] _______
+
+ws = <test_ingest.Workspace object at 0x10a362970>
+path = '/Users/johnsfolder/workspace/language-of-computation/week4-assignment/books.csv'
+
+    @pytest.mark.parametrize("path", SUPPLIED)
+    def test_running_the_same_file_twice_creates_no_duplicates(ws, path):
+>       ws.run(path)
+
+test_ingest.py:276: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a362970>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-9g99rtho/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-9g99rtho/ingestion-log.json' = <test_ingest.Workspace object at 0x10a362970>.log
+
+test_ingest.py:91: AssertionError
+___ test_running_the_same_file_twice_creates_no_duplicates[books-batch2.csv] ___
+
+ws = <test_ingest.Workspace object at 0x10a3644c0>
+path = '/Users/johnsfolder/workspace/language-of-computation/week4-assignment/books-batch2.csv'
+
+    @pytest.mark.parametrize("path", SUPPLIED)
+    def test_running_the_same_file_twice_creates_no_duplicates(ws, path):
+>       ws.run(path)
+
+test_ingest.py:276: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a3644c0>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-az7vycu3/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-az7vycu3/ingestion-log.json' = <test_ingest.Workspace object at 0x10a3644c0>.log
+
+test_ingest.py:91: AssertionError
+_______ test_every_run_adds_a_log_entry_without_overwriting_earlier_ones _______
+
+ws = <test_ingest.Workspace object at 0x10a3713d0>
+
+    def test_every_run_adds_a_log_entry_without_overwriting_earlier_ones(ws):
+        earlier = []
+        for path in (BATCH2_CSV, BATCH2_CSV, BOOKS_CSV):
+>           ws.run(path)
+
+test_ingest.py:291: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a3713d0>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-x79gjzh6/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-x79gjzh6/ingestion-log.json' = <test_ingest.Workspace object at 0x10a3713d0>.log
+
+test_ingest.py:91: AssertionError
+___ test_loaded_updated_skipped_and_rejected_add_up_to_rows_read[books.csv] ____
+
+ws = <test_ingest.Workspace object at 0x10a3129d0>
+paths = ['/Users/johnsfolder/workspace/language-of-computation/week4-assignment/books.csv']
+
+    @pytest.mark.parametrize("paths", [
+        pytest.param([BOOKS_CSV], id="books.csv"),
+        pytest.param([BATCH2_CSV], id="books-batch2.csv"),
+        pytest.param([BOOKS_CSV, BOOKS_CSV, BATCH2_CSV], id="three-runs-in-order"),
+    ])
+    def test_loaded_updated_skipped_and_rejected_add_up_to_rows_read(ws, paths):
+        for path in paths:
+>           counts = totals(ws.run(path))
+
+test_ingest.py:305: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a3129d0>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-36sck800/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-36sck800/ingestion-log.json' = <test_ingest.Workspace object at 0x10a3129d0>.log
+
+test_ingest.py:91: AssertionError
+_ test_loaded_updated_skipped_and_rejected_add_up_to_rows_read[books-batch2.csv] _
+
+ws = <test_ingest.Workspace object at 0x10a3df040>
+paths = ['/Users/johnsfolder/workspace/language-of-computation/week4-assignment/books-batch2.csv']
+
+    @pytest.mark.parametrize("paths", [
+        pytest.param([BOOKS_CSV], id="books.csv"),
+        pytest.param([BATCH2_CSV], id="books-batch2.csv"),
+        pytest.param([BOOKS_CSV, BOOKS_CSV, BATCH2_CSV], id="three-runs-in-order"),
+    ])
+    def test_loaded_updated_skipped_and_rejected_add_up_to_rows_read(ws, paths):
+        for path in paths:
+>           counts = totals(ws.run(path))
+
+test_ingest.py:305: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a3df040>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-y0j5hkp8/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-y0j5hkp8/ingestion-log.json' = <test_ingest.Workspace object at 0x10a3df040>.log
+
+test_ingest.py:91: AssertionError
+_ test_loaded_updated_skipped_and_rejected_add_up_to_rows_read[three-runs-in-order] _
+
+ws = <test_ingest.Workspace object at 0x10a3c1e20>
+paths = ['/Users/johnsfolder/workspace/language-of-computation/week4-assignment/books.csv', '/Users/johnsfolder/workspace/lang.../week4-assignment/books.csv', '/Users/johnsfolder/workspace/language-of-computation/week4-assignment/books-batch2.csv']
+
+    @pytest.mark.parametrize("paths", [
+        pytest.param([BOOKS_CSV], id="books.csv"),
+        pytest.param([BATCH2_CSV], id="books-batch2.csv"),
+        pytest.param([BOOKS_CSV, BOOKS_CSV, BATCH2_CSV], id="three-runs-in-order"),
+    ])
+    def test_loaded_updated_skipped_and_rejected_add_up_to_rows_read(ws, paths):
+        for path in paths:
+>           counts = totals(ws.run(path))
+
+test_ingest.py:305: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a3c1e20>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-th6xoklg/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-th6xoklg/ingestion-log.json' = <test_ingest.Workspace object at 0x10a3c1e20>.log
+
+test_ingest.py:91: AssertionError
+_ test_same_file_on_an_empty_database_twice_gives_the_same_database[books.csv] _
+
+path = '/Users/johnsfolder/workspace/language-of-computation/week4-assignment/books.csv'
+
+    @pytest.mark.parametrize("path", SUPPLIED)
+    def test_same_file_on_an_empty_database_twice_gives_the_same_database(path):
+        databases = []
+        for _ in range(2):
+            folder = tempfile.mkdtemp(prefix="ingest-test-")
+            try:
+                run = Workspace(folder)
+>               run.run(path)
+
+test_ingest.py:321: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a312f10>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-ky98s355/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-ky98s355/ingestion-log.json' = <test_ingest.Workspace object at 0x10a312f10>.log
+
+test_ingest.py:91: AssertionError
+_ test_same_file_on_an_empty_database_twice_gives_the_same_database[books-batch2.csv] _
+
+path = '/Users/johnsfolder/workspace/language-of-computation/week4-assignment/books-batch2.csv'
+
+    @pytest.mark.parametrize("path", SUPPLIED)
+    def test_same_file_on_an_empty_database_twice_gives_the_same_database(path):
+        databases = []
+        for _ in range(2):
+            folder = tempfile.mkdtemp(prefix="ingest-test-")
+            try:
+                run = Workspace(folder)
+>               run.run(path)
+
+test_ingest.py:321: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_ingest.py:88: in run
+    return self.entries()[-1]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_ingest.Workspace object at 0x10a3e0610>
+
+    def entries(self):
+>       assert os.path.exists(self.log), "ingest.py wrote no log.\n" + self.output
+E       AssertionError: ingest.py wrote no log.
+E         exit code 1
+E         stdout:
+E         
+E         stderr:
+E         Usage: python3 ingest.py <books file>.csv
+E         
+E       assert False
+E        +  where False = <function exists at 0x1047a2700>('/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-n1rpmlhi/ingestion-log.json')
+E        +    where <function exists at 0x1047a2700> = <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'>.exists
+E        +      where <module 'posixpath' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.py'> = os.path
+E        +    and   '/var/folders/mw/g733mtt94y59lbq8f50_79jm0000gn/T/ingest-test-n1rpmlhi/ingestion-log.json' = <test_ingest.Workspace object at 0x10a3e0610>.log
+
+test_ingest.py:91: AssertionError
+=========================== short test summary info ============================
+FAILED test_ingest.py::test_example[example_01[0439139600|9780439139601]] - A...
+FAILED test_ingest.py::test_example[example_02[043965548X|blank]] - Assertion...
+FAILED test_ingest.py::test_example[example_03[031200009x|9780312000097]] - A...
+FAILED test_ingest.py::test_example[example_04[0-450-19827-8|9780450198274]]
+FAILED test_ingest.py::test_example[example_05[162 001 4750|9781620014752]]
+FAILED test_ingest.py::test_example[example_06[439023483|blank]] - AssertionE...
+FAILED test_ingest.py::test_example[example_07[439554934|9.78043955493e+12]]
+FAILED test_ingest.py::test_example[example_08[439023483|9.78043902348e+12]]
+FAILED test_ingest.py::test_example[example_09[blank|9.78043902348e+12]] - As...
+FAILED test_ingest.py::test_example[example_10[blank|76783609419.0]] - Assert...
+FAILED test_ingest.py::test_example[example_11[blank|9780439139601.0]] - Asse...
+FAILED test_ingest.py::test_example[example_12[04390A3483|blank]] - Assertion...
+FAILED test_ingest.py::test_example[example_13[15287463097|blank]] - Assertio...
+FAILED test_ingest.py::test_example[example_14[1854433017|blank]] - Assertion...
+FAILED test_ingest.py::test_example[example_15[blank|blank]] - AssertionError...
+FAILED test_ingest.py::test_example[example_16[1555550126|9781555550134]] - A...
+FAILED test_ingest.py::test_example[example_17[9781982147600|blank]] - Assert...
+FAILED test_ingest.py::test_example[example_18[blank|9798351220413]] - Assert...
+FAILED test_ingest.py::test_example[example_19[0439139600|9780061120085]] - A...
+FAILED test_ingest.py::test_example[example_20[0439139600|12345]] - Assertion...
+FAILED test_ingest.py::test_example[example_21[9780439139601|9.7804391396e+12]]
+FAILED test_ingest.py::test_example_15_blank_and_blank_is_rejected_even_for_a_known_supplier_id
+FAILED test_ingest.py::test_example_22_same_row_again_is_skipped_without_a_duplicate
+FAILED test_ingest.py::test_running_the_same_file_twice_creates_no_duplicates[books.csv]
+FAILED test_ingest.py::test_running_the_same_file_twice_creates_no_duplicates[books-batch2.csv]
+FAILED test_ingest.py::test_every_run_adds_a_log_entry_without_overwriting_earlier_ones
+FAILED test_ingest.py::test_loaded_updated_skipped_and_rejected_add_up_to_rows_read[books.csv]
+FAILED test_ingest.py::test_loaded_updated_skipped_and_rejected_add_up_to_rows_read[books-batch2.csv]
+FAILED test_ingest.py::test_loaded_updated_skipped_and_rejected_add_up_to_rows_read[three-runs-in-order]
+FAILED test_ingest.py::test_same_file_on_an_empty_database_twice_gives_the_same_database[books.csv]
+FAILED test_ingest.py::test_same_file_on_an_empty_database_twice_gives_the_same_database[books-batch2.csv]
+============================== 31 failed in 0.77s ==============================

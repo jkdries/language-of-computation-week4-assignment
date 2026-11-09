@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ingestion Report</title>
+<style>
+  :root {
+    --bg: #f7f7f5; --panel: #ffffff; --text: #1f2328; --muted: #5f6670;
+    --line: #dcdde0; --accent: #2457a6; --bad: #a32020; --warn: #8a5a00; --good: #1d6b3a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #17191c; --panel: #212429; --text: #e8e9eb; --muted: #a2a8b0;
+      --line: #3a3e45; --accent: #8ab2f0; --bad: #f09090; --warn: #e3b860; --good: #7fd09c;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 24px 16px 48px; background: var(--bg); color: var(--text);
+         font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 960px; margin: 0 auto; }
+  h1 { margin: 0 0 4px; font-size: 1.6rem; }
+  h2 { margin: 0; font-size: 1.15rem; overflow-wrap: anywhere; }
+  h3 { margin: 16px 0 6px; font-size: 1rem; }
+  p { margin: 0 0 12px; }
+  .muted { color: var(--muted); }
+  .open { display: inline-block; margin: 8px 0 12px; padding: 10px 16px; border-radius: 6px;
+          background: var(--accent); color: var(--bg); font-weight: 600; cursor: pointer; }
+  .open:focus-within { outline: 2px solid var(--text); outline-offset: 2px; }
+  input[type=file] { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .error { color: var(--bad); font-weight: 600; }
+  .run { margin-top: 16px; padding: 16px; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; }
+  .numbers { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; margin: 12px 0; }
+  .number { padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; }
+  .number b { display: block; font-size: 1.3rem; font-variant-numeric: tabular-nums; }
+  .number span { color: var(--muted); font-size: .85rem; }
+  .bad b { color: var(--bad); } .warn b { color: var(--warn); } .good b { color: var(--good); }
+  ul { margin: 0 0 8px; padding-left: 20px; }
+  details { margin-top: 8px; }
+  summary { cursor: pointer; font-weight: 600; }
+  .scroll { overflow-x: auto; margin-top: 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+  th, td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Ingestion report</h1>
+  <p class="muted">Open <code>ingestion-log.json</code> to see each run, newest first. The file stays on this computer.</p>
+  <label class="open">Open ingestion-log.json
+    <input type="file" id="picker" accept=".json,application/json">
+  </label>
+  <p id="message" class="error" role="alert" hidden></p>
+  <div id="runs"></div>
+</main>
+<script>
+  var picker = document.getElementById('picker');
+  var message = document.getElementById('message');
+  var runsBox = document.getElementById('runs');
+
+  function el(tag, className, text) {
+    var node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  function number(label, value, className) {
+    var box = el('div', 'number ' + (className || ''));
+    box.appendChild(el('b', '', String(value === undefined ? 0 : value)));
+    box.appendChild(el('span', '', label));
+    return box;
+  }
+
+  function text(value) {
+    if (value === undefined || value === null) return '';
+    if (Array.isArray(value)) return value.join('; ');
+    return String(value);
+  }
+
+  // Tables are built only when opened, because a rerun can list 10,000 rows.
+  function rowsSection(title, rows, columns) {
+    var section = el('details');
+    section.appendChild(el('summary', '', title + ' (' + rows.length + ')'));
+    var built = false;
+    function build() {
+      if (built) return;
+      built = true;
+      if (!rows.length) { section.appendChild(el('p', 'muted', 'None.')); return; }
+      var wrap = el('div', 'scroll');
+      var table = el('table');
+      var head = el('tr');
+      columns.forEach(function (column) { head.appendChild(el('th', '', column[0])); });
+      var thead = el('thead');
+      thead.appendChild(head);
+      table.appendChild(thead);
+      var body = el('tbody');
+      rows.forEach(function (row) {
+        var tr = el('tr');
+        columns.forEach(function (column) { tr.appendChild(el('td', '', text(column[1](row)))); });
+        body.appendChild(tr);
+      });
+      table.appendChild(body);
+      wrap.appendChild(table);
+      section.appendChild(wrap);
+    }
+    section.addEventListener('toggle', function () { if (section.open) build(); });
+    return section;
+  }
+
+  function counts(list, title) {
+    var names = Object.keys(list || {});
+    var section = el('div');
+    section.appendChild(el('h3', '', title));
+    if (!names.length) { section.appendChild(el('p', 'muted', 'None.')); return section; }
+    var ul = el('ul');
+    names.forEach(function (name) { ul.appendChild(el('li', '', list[name] + ': ' + name)); });
+    section.appendChild(ul);
+    return section;
+  }
+
+  var where = [
+    ['File', function (r) { return r.file; }],
+    ['Record', function (r) { return r.record; }],
+    ['Title', function (r) { return r.title; }],
+    ['Supplier ID', function (r) { return r.book_id; }],
+    ['Original isbn', function (r) { return r.original_isbn; }],
+    ['Original isbn13', function (r) { return r.original_isbn13; }],
+    ['Interpreted isbn', function (r) { return r.interpreted_isbn; }],
+    ['Interpreted isbn13', function (r) { return r.interpreted_isbn13; }]
+  ];
+
+  function showRun(run, position, total) {
+    var box = el('section', 'run');
+    var verdictClass = run.verdict === 'Completed' ? 'good' : (run.verdict === 'Failed' ? 'bad' : 'warn');
+    box.appendChild(el('h2', '', 'Run ' + position + ' of ' + total + ': ' + (run.verdict || '')));
+    box.lastChild.className = verdictClass;
+    box.appendChild(el('p', 'muted', 'Started ' + text(run.started_at) + ', finished ' + text(run.finished_at) +
+      '. Status: ' + text(run.status) + '. Catalog: ' + text(run.catalog_before) + ' books before, ' +
+      text(run.catalog_after) + ' after.'));
+
+    var t = run.totals || {};
+    var numbers = el('div', 'numbers');
+    numbers.appendChild(number('Rows read', t.rows_read));
+    numbers.appendChild(number('Loaded (inserted)', t.loaded, 'good'));
+    numbers.appendChild(number('Updated', t.updated, 'good'));
+    numbers.appendChild(number('Skipped', t.skipped));
+    numbers.appendChild(number('Rejected', t.rejected, 'bad'));
+    numbers.appendChild(number('Warnings', t.warnings, 'warn'));
+    numbers.appendChild(number('Repairs', t.repairs));
+    numbers.appendChild(number('Rows repaired', t.rows_repaired));
+    box.appendChild(numbers);
+    box.appendChild(el('p', run.totals_match === false ? 'error' : 'muted', text(run.totals_note)));
+    box.appendChild(el('p', 'muted', text(run.overlap_note)));
+
+    box.appendChild(el('h3', '', 'Files, in order'));
+    var files = el('div', 'scroll');
+    var table = el('table');
+    var head = el('tr');
+    ['File', 'SHA-256', 'Read', 'Loaded', 'Updated', 'Skipped', 'Rejected', 'Warnings', 'Repairs', 'File error']
+      .forEach(function (name) { head.appendChild(el('th', '', name)); });
+    table.appendChild(head);
+    (run.files || []).forEach(function (f) {
+      var tr = el('tr');
+      [f.file, f.sha256, f.rows_read, f.loaded, f.updated, f.skipped, f.rejected, f.warnings, f.repairs, f.file_error]
+        .forEach(function (value) { tr.appendChild(el('td', '', text(value))); });
+      table.appendChild(tr);
+    });
+    files.appendChild(table);
+    box.appendChild(files);
+
+    (run.file_errors || []).forEach(function (error) {
+      box.appendChild(el('p', 'error', error.file + ': ' + error.error + ' (reading stopped at record ' +
+        text(error.reading_stopped_at_record) + '). ' + text(error.note) + ' ' + error.action));
+    });
+
+    box.appendChild(counts(run.repairs_by_type, 'Repairs, by type'));
+    box.appendChild(counts(run.rejection_reasons, 'Rejections, by reason'));
+
+    box.appendChild(rowsSection('Rejected rows', run.rejected_rows || [], where.concat([
+      ['Reason', function (r) { return r.reasons; }],
+      ['Action', function (r) { return r.actions; }]
+    ])));
+    box.appendChild(rowsSection('Skipped rows', run.skipped_rows || [], where.concat([
+      ['Reason', function (r) { return r.reason; }]
+    ])));
+    box.appendChild(rowsSection('Warnings', run.warnings || [], where.concat([
+      ['Warning', function (r) { return r.warning; }]
+    ])));
+    box.appendChild(rowsSection('Updates', run.updates || [], where.concat([
+      ['Catalog entry', function (r) { return r.catalog_entry; }],
+      ['Changes (old → new)', function (r) {
+        return (r.changes || []).map(function (c) { return c.field + ': ' + text(c.old) + ' → ' + text(c.new); });
+      }]
+    ])));
+    return box;
+  }
+
+  picker.addEventListener('change', function () {
+    var file = picker.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onerror = function () { fail('This file could not be read.'); };
+    reader.onload = function () {
+      var entries;
+      try { entries = JSON.parse(reader.result); }
+      catch (error) { return fail('This file is not valid JSON. Choose ingestion-log.json.'); }
+      if (!Array.isArray(entries)) return fail('This file is not an ingestion log. Choose ingestion-log.json.');
+      message.hidden = true;
+      runsBox.textContent = '';
+      if (!entries.length) runsBox.appendChild(el('p', 'muted', 'This log has no runs yet.'));
+      for (var i = entries.length - 1; i >= 0; i--) {
+        runsBox.appendChild(showRun(entries[i], i + 1, entries.length));
+      }
+    };
+    reader.readAsText(file);
+    picker.value = '';
+  });
+
+  function fail(text) {
+    message.textContent = text;
+    message.hidden = false;
+  }
+</script>
+</body>
+</html>
